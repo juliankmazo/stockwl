@@ -12,6 +12,14 @@ handlers:
 - url: .*
   script: main.app
 
+  # Endpoints handler
+- url: /_ah/spi/.*
+  script: services.api_service.application
+
 libraries:
 - name: webapp2
   version: "2.5.2"
+- name: pycrypto
+  version: latest
+- name: endpoints
+  version: 1.0

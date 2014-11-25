@@ -6,3 +6,4 @@ class StockResponse(messages.Message):
 
 class StockRequest(messages.Message):
 	name = messages.StringField(1)
+

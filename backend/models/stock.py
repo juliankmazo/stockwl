@@ -1,6 +1,6 @@
 from google.appengine.ext import ndb
 
-class stock(ndb.Model):
+class Stock(ndb.Model):
 	symbol = ndb.StringProperty(required = True)
 	created = ndb.DateTimeProperty(auto_now_add = True)
 

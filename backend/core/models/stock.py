@@ -4,19 +4,19 @@ from core.models import BaseModel
 
 
 class Stock(BaseModel):
-    code = ndb.StringProperty(required = True)
+    code = ndb.StringProperty(required=True)
 
-    PE = ndb.StringProperty()
-    PriceSales = ndb.StringProperty()
-    EPS = ndb.StringProperty()
-    TotalCashPerShare = ndb.StringProperty()
-    BookValuePerShare = ndb.StringProperty()
-    DividendYield = ndb.StringProperty()
-    ProfitMargin = ndb.StringProperty()
-    TotalDebt = ndb.StringProperty()
-    Notes = ndb.StringProperty()
-    YearsDebt = ndb.ComputedProperty(lambda self: self.Debt*1000000/(self.EPS*self.Shares))
-    Shares = ndb.IntegerProperty()
+    pe = ndb.StringProperty()
+    price_sales = ndb.StringProperty()
+    eps = ndb.StringProperty()
+    total_cash_per_share = ndb.StringProperty()
+    book_value_per_share = ndb.StringProperty()
+    dividend_yield = ndb.StringProperty()
+    profit_margin = ndb.StringProperty()
+    total_debt = ndb.StringProperty()
+    notes = ndb.StringProperty()
+    years_debt = ndb.ComputedProperty(lambda self: self.Debt*1000000/(self.EPS*self.Shares))
+    shares = ndb.IntegerProperty()
 
     @classmethod
     def get_by_code(cls, code):

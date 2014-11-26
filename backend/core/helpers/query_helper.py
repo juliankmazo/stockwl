@@ -6,34 +6,35 @@ from models.Stock import Stock
 from core.helpers import BaseHelper
 
 
-class YahooQueryHelper(BaseHelper):
+class QueryHelper(BaseHelper):
 
     @classmethod
     def query_put(cls, stock):
         params = {}
-        params, msg = cls.get_stats(stock, params)
+        params, msg = cls.get_yahoo_stats(stock, params)
 
         #Put google_finance querys
         if params:
             s = Stock.get_by_code(stock)
             if s:                       # Update the stats
                 # First the yahoo stats
-                s.PriceSales = params['PriceSales']
-                s.TotalCashPerShare = params['TotalCashPerShare']
-                s.BookValuePerShare = params['BookValuePerShare']
-                s.ProfitMargin = params['ProfitMargin']
-                s.TotalDebt = params['TotalDebt']
+                s.price_sale = params['PriceSales']
+                s.total_cash_per_share = params['TotalCashPerShare']
+                s.book_value_per_share = params['BookValuePerShare']
+                s.profit_margin = params['ProfitMargin']
+                s.total_debt = params['TotalDebt']
                 # Google Stats
 
                 s.put()                 # Put it in the DataBase
             else:                       # New Stock
                 s = Stock(
                     price_sale=params['PriceSales'],
-                    TotalCashPerShare=params['TotalCashPerShare'],
-                    BookValuePerShare=params['BookValuePerShare'],
-                    ProfitMargin=params['ProfitMargin'],
-                    TotalDebt=params['TotalDebt'],
+                    total_cash_per_share=params['TotalCashPerShare'],
+                    book_value_per_share=params['BookValuePerShare'],
+                    profit_margin=params['ProfitMargin'],
+                    total_debt=params['TotalDebt'],
                     code=params['Symbol']
+                    #Google stats
                 )
                 s.put()
                 return params['Symbol']+' has been added and updated'
@@ -41,7 +42,7 @@ class YahooQueryHelper(BaseHelper):
             return msg
 
     @classmethod
-    def get_ks(cls, stock):
+    def get_yahoo_ks(cls, stock):
         url = "https://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FRO\
         M%20yahoo.finance.keystats%20WHERE%20symbol%3D'{}.AX'&format=json&di\
         agnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&c\
@@ -54,8 +55,8 @@ class YahooQueryHelper(BaseHelper):
             return None
 
     @classmethod
-    def get_stats(cls, stock, params):
-        ks = cls.get_ks(stock)
+    def get_yahoo_stats(cls, stock, params):
+        ks = cls.get_yahoo_ks(stock)
         if ks:
             params['PriceSales'] = ks['PriceSales']['content']
             params['TotalCashPerShare'] = ks['TotalCashPerShare']['content']

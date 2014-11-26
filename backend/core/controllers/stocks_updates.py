@@ -1,10 +1,15 @@
 from core.controllers import BaseController
+from core.helpers import query_helper
+from core.models import Stock
 
 
-class QueryStockController(BaseController):
+class UpdateStockController(BaseController):
     """
-    Gets stock info from yahoo and stores in ndb
+    Gets stats from yahoo and google, then updates the db
     """
 
-    def post(self, stock):
-        pass
+    def get(self):
+        stocks = Stock.query()
+        if stocks:
+            for s in stocks:
+                query_helper.query_put(s)

@@ -4,7 +4,7 @@ from core.models import BaseModel
 
 
 class Stock(BaseModel):
-    code = ndb.StringProperty(required = True)
+    code = ndb.StringProperty(required=True)
 
     PE = ndb.StringProperty()
     PriceSales = ndb.StringProperty()

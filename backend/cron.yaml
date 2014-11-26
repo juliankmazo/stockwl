@@ -1,0 +1,4 @@
+cron:
+- description: update stocks stats
+  url: /tasks/stocksupdate
+  schedule: every 20 minutes synchronized

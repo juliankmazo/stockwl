@@ -15,6 +15,9 @@
 # limitations under the License.
 #
 import webapp2
+from core.controllers import BaseController
+from core.controllers import UpdateStockController
+
 # from core.helpers import QueryHelper
 
 # def render_str(template, **params):
@@ -59,10 +62,13 @@ import webapp2
     #     webapp2.RequestHandler.initialize(self, *a, **kw)
     #     ukey = self.read_secure_cookie("usi")
     #     self.user = ukey and ndb.Key(urlsafe=ukey).get()
-class MainHandler(webapp2.RequestHandler):
+
+
+class MainHandler(BaseController):
     def get(self):
         self.response.write('Hello world!')
 
 app = webapp2.WSGIApplication([
+    ('/tasks/stocksupdate', UpdateStockController),
     ('/', MainHandler)
 ], debug=True)

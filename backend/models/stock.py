@@ -1,17 +1,26 @@
 from google.appengine.ext import ndb
 
 class Stock(ndb.Model):
-	symbol = ndb.StringProperty(required = True)
+	code = ndb.StringProperty(required = True)
 	created = ndb.DateTimeProperty(auto_now_add = True)
 
-	PE = ndb.FloatProperty()
-	PS = ndb.FloatProperty()
-	EPS = ndb.FloatProperty()
-	CHPS = ndb.FloatProperty()
-	BVPS = ndb.FloatProperty()
-	DividendYield = ndb.FloatProperty()
-	NetProfitMargin = ndb.FloatProperty()
-	Debt = ndb.FloatProperty()
+	PE = ndb.StringProperty()
+	PriceSales = ndb.StringProperty()
+	EPS = ndb.StringProperty()
+	TotalCashPerShare = ndb.StringProperty()
+	BookValuePerShare = ndb.StringProperty()
+	DividendYield = ndb.StringProperty()
+	ProfitMargin = ndb.StringProperty()
+	TotalDebt = ndb.StringProperty()
 	Notes = ndb.StringProperty()
-	YtpoD = ndb.ComputedProperty(lambda self: self.Debt*1000000/(self.EPS*self.Shares))
+	YearsDebt = ndb.ComputedProperty(lambda self: self.Debt*1000000/(self.EPS*self.Shares))
 	Shares = ndb.IntegerProperty()
+
+	@classmethod
+	def get_by_code(cls, code):
+		complete_code = 'ASX:'+code
+		s = cls.query(cls.code == complete_code).get()
+		if s:
+			return s
+		else:
+			return None

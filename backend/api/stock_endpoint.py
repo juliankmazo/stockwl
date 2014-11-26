@@ -5,11 +5,10 @@ as well as those methods defined in an API.
 """
 
 import endpoints
-from protorpc import remote
 
 
 stock_api = endpoints.api(
-	name='stockApi', 
-	version='v1', 
-	description='API for the stock web scraper'
+    name='stockApi',
+    version='v1',
+    description='API for the stock web scraper'
 )

@@ -2,8 +2,9 @@ from protorpc import messages
 
 
 class StockResponse(messages.Message):
-	name = messages.StringField(1)
+    code = messages.StringField(1)
+    message = messages.StringField(2)
+
 
 class StockRequest(messages.Message):
-	name = messages.StringField(1)
-
+    code = messages.StringField(1, required=True)

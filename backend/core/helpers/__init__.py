@@ -1,2 +1,2 @@
 from base_helper import BaseHelper
-from yahoo_query_helper import YahooQueryHelper
+from query_helper import QueryHelper

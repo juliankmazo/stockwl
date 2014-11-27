@@ -1,1 +1,56 @@
-{{outlet}}
+<div class="container">
+	<div class="row">
+		<div class="col-sm-12">
+			<h1>Stocks</h1>
+			{{liquid-outlet}}
+			<table class="table table-hover">
+				<thead>
+					<th>Stock Code</th>
+					<th>Company Name</th>
+					<th>Current Price</th>
+					<th>P/E</th>
+					<th>P/S</th>
+					<th>EPS</th>
+					<th>Cash holdings per Share</th>
+					<th>BVPS</th>
+					<th>Dividen Yield</th>
+					<th>Net Profit Margin</th>
+					<th>Debt</th>
+					<th>Notes</th>
+					<th>Years to pay off Debt</th>
+					<th>Shares</th>
+				</thead>
+				<tbody>
+					{{#each stock in this}}
+						<tr>
+							<td>{{stock.code}}</td>
+							<td>{{stock.companyName}}</td>
+							<td>{{stock.currentPrice}}</td>
+							<td>{{stock.pe}}</td>
+							<td>{{stock.priceSales}}</td>
+							<td>{{stock.eps}}</td>
+							<td>{{stock.totalCashPerShare}}</td>
+							<td>{{stock.bookValuePerShare}}</td>
+							<td>{{stock.dividendYield}}</td>
+							<td>{{stock.profitMargin}}</td>
+							<td>{{stock.totalDebt}}</td>
+							<td>{{input value=stock.notes}}</td>
+							<td>{{stock.yearsDebt}}</td>
+							<td>{{stock.shares}}</td>
+							<th>
+								{{#if stock.isSaving}}
+									<p>saving...</p>
+								{{else}}	
+									{{#if stock.isDirty}}
+										<a href="#" {{action 'saveNote' stock}} class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span></a>
+									{{/if}}
+								{{/if}}
+								<a href="#" {{action 'delete' stock}} class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
+							</th>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

@@ -4,6 +4,28 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 var app = new EmberApp();
 
+app.import('bower_components/bootstrap/dist/js/bootstrap.js');
+app.import('bower_components/bootstrap/dist/css/bootstrap.css');
+app.import('vendor/flaticon/font/flaticon.css');
+app.import('vendor/flaticon/font/flaticon.woff');
+app.import('vendor/flaticon/font/flaticon.ttf');
+
+var mergeTrees = require('broccoli-merge-trees');
+var pickFiles = require('broccoli-static-compiler');
+var extraAssets = pickFiles('bower_components/bootstrap/dist/fonts',{
+    srcDir: '/', 
+    files: ['**/*'],
+    destDir: '/fonts'
+});
+
+var extraAssets1 = pickFiles('vendor/flaticon/font',{
+    srcDir: '/', 
+    files: ['**/*'],
+    destDir: '/assets'
+});
+
+module.exports = mergeTrees([app.toTree(), extraAssets, extraAssets1]);
+
 // Use `app.import` to add additional libraries to the generated
 // output files.
 //
@@ -17,4 +39,4 @@ var app = new EmberApp();
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
-module.exports = app.toTree();
+// module.exports = mergeTrees([app.toTree(), extraAssets]);

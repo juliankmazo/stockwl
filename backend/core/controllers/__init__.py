@@ -1,1 +1,2 @@
 from base_controller import BaseController
+from stocks_updates import UpdateStockController

@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 import webapp2
-from core.controllers.stocks_updates import UpdateStockController
+from core.controllers import UpdateStockController
 
 
 app = webapp2.WSGIApplication([

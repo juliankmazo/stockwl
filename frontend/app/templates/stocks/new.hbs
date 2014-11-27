@@ -1,0 +1,11 @@
+<form {{action "save" stock on="submit"}} role="form">
+	<div class="form-group" {{bind-attr class="classError"}}>
+		<label for="code" class="control-label sr-only">Symbol:</label>
+		<div class="col-sm-4">
+		{{input value=code class="form-control" id="code" placeholder="Enter stock Symbol"}}
+		<p class="help-block">{{errorMessage}}</p>
+	</div>
+	<button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+	<button {{action "cancel"}} class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+</form>
+{{outlet}}

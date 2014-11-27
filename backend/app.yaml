@@ -14,7 +14,7 @@ handlers:
 
   # Endpoints handler
 - url: /_ah/spi/.*
-  script: services.api_service.application
+  script: services.application
 
 builtins:
 - remote_api: on

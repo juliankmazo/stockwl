@@ -2,7 +2,7 @@ import json
 import requests
 # import google_finance
 
-from models.Stock import Stock
+from core.models import Stock
 from core.helpers import BaseHelper
 
 

@@ -1,1 +1,1 @@
-from services.api_services import application
+from services.api_service import APPLICATION

@@ -9,12 +9,11 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
+- url: /_ah/spi/.*
+  script: services.APPLICATION
+
 - url: .*
   script: main.app
-
-  # Endpoints handler
-- url: /_ah/spi/.*
-  script: services.api_service.application
 
 builtins:
 - remote_api: on

@@ -5,20 +5,20 @@
 			{{liquid-outlet}}
 			<table class="table table-hover">
 				<thead>
-					<th>Stock Code</th>
-					<th>Company Name</th>
-					<th>Current Price</th>
-					<th>P/E</th>
-					<th>P/S</th>
-					<th>EPS</th>
-					<th>Cash holdings per Share</th>
-					<th>BVPS</th>
-					<th>Dividen Yield</th>
-					<th>Net Profit Margin</th>
-					<th>Debt</th>
-					<th>Notes</th>
-					<th>Years to pay off Debt</th>
-					<th>Shares</th>
+					<th {{action 'sortBy' 'code'}}>Stock Code</th>
+					<th {{action 'sortBy' 'companyName'}}>Company Name</th>
+					<th {{action 'sortBy' 'currentPrice'}}>Current Price</th>
+					<th {{action 'sortBy' 'pe'}}>P/E</th>
+					<th {{action 'sortBy' 'priceSales'}}>P/S</th>
+					<th {{action 'sortBy' 'eps'}}>EPS</th>
+					<th {{action 'sortBy' 'totalCashPerShare'}}>Cash holdings per Share</th>
+					<th {{action 'sortBy' 'bookValuePerShare'}}>BVPS</th>
+					<th {{action 'sortBy' 'dividenYield'}}>Dividen Yield</th>
+					<th {{action 'sortBy' 'profitMargin'}}>Net Profit Margin</th>
+					<th {{action 'sortBy' 'totalDebt'}}>Debt</th>
+					<th {{action 'sortBy' 'notes'}}>Notes</th>
+					<th {{action 'sortBy' 'yearsDebt'}}>Years to pay off Debt</th>
+					<th {{action 'sortBy' 'shares'}}>Shares</th>
 				</thead>
 				<tbody>
 					{{#each stock in this}}

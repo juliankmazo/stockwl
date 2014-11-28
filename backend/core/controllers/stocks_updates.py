@@ -1,5 +1,5 @@
 from core.controllers import BaseController
-from core.helpers import query_helper
+from core.helpers import QueryHelper
 from core.models import Stock
 
 
@@ -12,4 +12,4 @@ class UpdateStockController(BaseController):
         stocks = Stock.query()
         if stocks:
             for s in stocks:
-                query_helper.query_put(s)
+                QueryHelper().update_stock(s)

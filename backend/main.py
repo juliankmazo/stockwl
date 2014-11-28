@@ -18,7 +18,6 @@ import webapp2
 from core.controllers import BaseController
 from core.controllers import UpdateStockController
 
-
 # from core.helpers import QueryHelper
 
 # def render_str(template, **params):

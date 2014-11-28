@@ -1,6 +1,8 @@
 import json
 import requests
-# import google_finance
+import urllib2
+import logging
+from bs4 import BeautifulSoup
 
 from core.models import Stock
 from core.helpers import BaseHelper
@@ -9,37 +11,62 @@ from core.helpers import BaseHelper
 class QueryHelper(BaseHelper):
 
     @classmethod
-    def query_put(cls, stock):
+    def update_stock(cls, stock):
         params = {}
-        params, msg = cls.get_yahoo_stats(stock, params)
+        params1, msg_yahoo = cls.get_yahoo_stats(stock, params)
+        params2, msg_google = cls.get_google_stats(stock, params)
 
-        #Put google_finance querys
-        if params:
-            s = Stock.get_by_code(stock)
-            if s:                       # Update the stats
-                # First the yahoo stats
-                s.price_sale = params['PriceSales']
-                s.total_cash_per_share = params['TotalCashPerShare']
-                s.book_value_per_share = params['BookValuePerShare']
-                s.profit_margin = params['ProfitMargin']
-                s.total_debt = params['TotalDebt']
-                # Google Stats
-
-                s.put()                 # Put it in the DataBase
-            else:                       # New Stock
-                s = Stock(
-                    price_sale=params['PriceSales'],
-                    total_cash_per_share=params['TotalCashPerShare'],
-                    book_value_per_share=params['BookValuePerShare'],
-                    profit_margin=params['ProfitMargin'],
-                    total_debt=params['TotalDebt'],
-                    code=params['Symbol']
-                    #Google stats
-                )
-                s.put()
-                return params['Symbol']+' has been added and updated'
+        if params1 or params2:
+            if params1:
+                # The yahoo stats
+                stock.price_sale = params1['PriceSales']
+                stock.total_cash_per_share = params1['TotalCashPerShare']
+                stock.book_value_per_share = params1['BookValuePerShare']
+                stock.profit_margin = params1['ProfitMargin']
+                stock.total_debt = params1['TotalDebt']
+                stock.code = params1['Symbol']
+            if params2:
+                # The google Stats
+                stock.name = params2['Name']
+                stock.price = params2['Price']
+                stock.eps = params2['EPS']
+                stock.pe = params2['PE']
+                stock.dividend_yield = params2['DivYield']
+                stock.shares = params2['Shares']
+            # Put it in the DataBase
+            stock.put()
+            return [True, params['Symbol']+' has been updated']
         else:
-            return msg
+            return [False, msg_yahoo, msg_google]
+
+    @classmethod
+    def create_stock(cls, stock):
+        params = {}
+        params1, msg_yahoo = cls.get_yahoo_stats(stock, params)
+        logging.error('msg_yahoo')
+        logging.error(msg_yahoo)
+        params2, msg_google = cls.get_google_stats(stock, params)
+        logging.error('msg_google')
+        logging.error(msg_yahoo)
+        if params1 and params2:
+            new_stock = Stock(
+                price_sale=params1['PriceSales'],
+                TotalCashPerShare=params1['TotalCashPerShare'],
+                BookValuePerShare=params1['BookValuePerShare'],
+                ProfitMargin=params1['ProfitMargin'],
+                TotalDebt=params1['TotalDebt'],
+                code=params1['Symbol'],
+                name=params2['Name'],
+                price=params2['Price'],
+                eps=params2['EPS'],
+                pe=params2['PE'],
+                dividend_yield=params2['DivYield'],
+                shares=params2['Shares']
+            )
+            new_stock.put()
+            return [True, params['Symbol']+' has been created']
+        else:
+            return [False, msg_yahoo, msg_google]
 
     @classmethod
     def get_yahoo_ks(cls, stock):
@@ -47,8 +74,10 @@ class QueryHelper(BaseHelper):
         M%20yahoo.finance.keystats%20WHERE%20symbol%3D'{}.AX'&format=json&di\
         agnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&c\
         allback=".format(stock)
+        logging.error('URL: '+url)
         r = requests.get(url)
-        ks = json.loads(r.text)['query']['results']['stats']
+        # r = urllib2.urlopen(url)
+        ks = json.loads(r.read)['query']['results']['stats']
         if 'MarketCap' in ks:
             return ks
         else:
@@ -67,3 +96,36 @@ class QueryHelper(BaseHelper):
             return params, 'Here is '+params['Symbol']
         else:
             return None, "We couldn't find that stock"
+
+    @classmethod
+    def get_google_html(cls, stock):
+        url = 'https://www.google.com/finance?q=ASX:{}'.format(stock)
+        r = requests.get(url)
+        if r.status_code == 200:
+            body = BeautifulSoup(r.text)
+            if body.find(id='companyheader'):
+                return body, 'Status code: '+r.status_code
+            else:
+                return None, "We couldn't find that stock"
+        else:
+            return None, 'Status code: '+r.status_code
+
+    @classmethod
+    def get_google_stats(cls, stock, params):
+        body, msg = cls.get_google_html(stock)
+        if body:
+            params['Name'] = body.find(id='companyheader').h3.string
+            params['Code'] = body.find(id='companyheader').div.next_sibling.a.string
+            params['Price'] = body.find(id="price-panel").div.span.span.string
+
+            element = body.find(attrs={"data-snapfield": 'eps'})
+            params['EPS'] = element.parent.find(class_="val").string if element else ""
+            element = body.find(attrs={"data-snapfield": 'pe_ratio'})
+            params['PE'] = element.parent.find(class_="val").string if element else ""
+            element = body.find(attrs={"data-snapfield": 'latest_dividend-dividend_yield'})
+            params['DivYield'] = element.parent.find(class_="val").string if element else ""
+            element = body.find(attrs={"data-snapfield": 'shares'})
+            params['Shares'] = element.parent.find(class_="val").string if element else ""
+            return params, 'Here is '+params['Code']
+        else:
+            return None, msg

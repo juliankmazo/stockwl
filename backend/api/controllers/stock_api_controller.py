@@ -1,40 +1,57 @@
 import endpoints
+from protorpc import message_types
+from core.models import Stock
 
 from api import stock_api
 from api.messages import ID_resource
 from api.messages import StockResponse
-# from messages import StockRequest
-
+from api.messages import StockListResponse
+from api.messages import StockRequest
+from api.helpers import StockApiHelper
 from api.controllers import BaseApiController
+
+from core.helpers import QueryHelper
 
 
 @stock_api.api_class(resource_name='stocks', path='stocks')
 class StockEndpoint(BaseApiController):
 
-    @endpoints.method(ID_resource, StockResponse,
+    @endpoints.method(message_types.VoidMessage, StockListResponse,
                       path='', http_method='GET',
                       name='find_all')
     def get_stocks(self, request):
-        code = 'code:'+str(request.id)
-        return StockResponse(code=code, message='OK')
+        stocks = Stock.query().fetch()
+        return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks], count=len(stocks))
+
+    @endpoints.method(ID_resource, StockListResponse,
+                      path='{id}', http_method='DELETE',
+                      name='delete')
+    def update_stock(self, request):
+        stock = Stock.get_by_id(request.id)
+        if not stock:
+            raise endpoints.NotFoundException("That Stock ID doesn't exist")
+        else:
+            stock.key.delete()
+        stocks = Stock.query().fetch()
+        return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks], count=len(stocks))
+
+    @endpoints.method(StockRequest, StockResponse,
+                      path='', http_method='POST',
+                      name='create')
+    def create_stock(self, request):
+        status = QueryHelper().create_stock(request.code)
+        import logging
+        logging.error('status')
+        logging.error(status)
+        if status[0] is False:
+            raise endpoints.NotFoundException('errors: ' + status[1] + ', ' + status[2])
+        else:
+            stocks = Stock.query().fetch()
+            return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks], count=len(stocks))
 
     @endpoints.method(ID_resource, StockResponse,
                       path='{id}', http_method='PUT',
                       name='update')
-    def update_stock(self, request):
-        code = 'code:'+str(request.id)
-        return StockResponse(code=code, message='OK')
-
-    @endpoints.method(ID_resource, StockResponse,
-                      path='', http_method='POST',
-                      name='create')
-    def create_stock(self, request):
-        code = 'code:'+str(request.id)
-        return StockResponse(code=code, message='OK')
-
-    @endpoints.method(ID_resource, StockResponse,
-                      path='{id}', http_method='DELETE',
-                      name='delete')
     def delete_stock(self, request):
         code = 'code:'+str(request.id)
         return StockResponse(code=code, message='OK')

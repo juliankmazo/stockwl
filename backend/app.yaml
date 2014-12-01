@@ -9,11 +9,21 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
+- url: /tasks/.*
+  script: main.app
+
+- url: /fonts
+  static_dir: dist/fonts
+
+- url: /assets
+  static_dir: dist/assets
+
 - url: /_ah/spi/.*
   script: services.APPLICATION
 
 - url: .*
-  script: main.app
+  static_files: dist/index.html
+  upload: dist/index.html
 
 builtins:
 - remote_api: on

@@ -23,7 +23,7 @@ export default Ember.ArrayController.extend({
 						  'shares'];
 			for (var i = stocks.length - 1; i >= 0; i--) {
 				this.set(stocks[i]+'UpDown', '');
-			};
+			}
 			if (this.get('sortAscending')) {
 				this.set(property+'UpDown', 'glyphicon-chevron-up');
 			}else {

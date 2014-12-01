@@ -70,7 +70,7 @@ class QueryHelper(BaseHelper):
 
     @classmethod
     def get_yahoo_ks(cls, stock):
-        url = "https://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FRO\
+        url = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FRO\
         M%20yahoo.finance.keystats%20WHERE%20symbol%3D'{}.AX'&format=json&di\
         agnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&c\
         allback=".format(stock)
@@ -99,7 +99,7 @@ class QueryHelper(BaseHelper):
 
     @classmethod
     def get_google_html(cls, stock):
-        url = 'https://www.google.com/finance?q=ASX:{}'.format(stock)
+        url = 'http://www.google.com/finance?q=ASX:{}'.format(stock)
         r = requests.get(url)
         if r.status_code == 200:
             body = BeautifulSoup(r.text)

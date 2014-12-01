@@ -13,7 +13,7 @@ var Stock = DS.Model.extend({
   profitMargin: DS.attr('string'),
   totalDebt: DS.attr('string'),
   notes: DS.attr('string'),
-  yearsDebt: DS.attr('string'),
+  // yearsDebt: DS.attr('string'),
   shares: DS.attr('string')
 });
 

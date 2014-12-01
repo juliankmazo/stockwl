@@ -1,24 +1,24 @@
-<div class="container">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-12">
 			<h1>Stocks</h1>
 			{{liquid-outlet}}
-			<table class="table table-hover">
+			<table class="table table-hover table-condensed text-center">
 				<thead>
-					<th {{action 'sortBy' 'code'}}>Stock Code</th>
-					<th {{action 'sortBy' 'companyName'}}>Company Name</th>
-					<th {{action 'sortBy' 'currentPrice'}}>Current Price</th>
-					<th {{action 'sortBy' 'pe'}}>P/E</th>
-					<th {{action 'sortBy' 'priceSales'}}>P/S</th>
-					<th {{action 'sortBy' 'eps'}}>EPS</th>
-					<th {{action 'sortBy' 'totalCashPerShare'}}>Cash holdings per Share</th>
-					<th {{action 'sortBy' 'bookValuePerShare'}}>BVPS</th>
-					<th {{action 'sortBy' 'dividenYield'}}>Dividen Yield</th>
-					<th {{action 'sortBy' 'profitMargin'}}>Net Profit Margin</th>
-					<th {{action 'sortBy' 'totalDebt'}}>Debt</th>
-					<th {{action 'sortBy' 'notes'}}>Notes</th>
-					<th {{action 'sortBy' 'yearsDebt'}}>Years to pay off Debt</th>
-					<th {{action 'sortBy' 'shares'}}>Shares</th>
+					<th {{action 'sortBy' 'code'}} class="text-center">Stock Code <span class="glyphicon" {{bind-attr class="codeUpDown"}}></span></th>
+					<th {{action 'sortBy' 'companyName'}} class="text-center">Company Name <span class="glyphicon" {{bind-attr class="companyNameUpDown"}}></span></th>
+					<th {{action 'sortBy' 'currentPrice'}} class="text-center">Current Price <span class="glyphicon" {{bind-attr class="currentPriceUpDown"}}></span></th>
+					<th {{action 'sortBy' 'pe'}} class="text-center">P/E <span class="glyphicon" {{bind-attr class="peUpDown"}}></span></th>
+					<th {{action 'sortBy' 'priceSales'}} class="text-center">P/S <span class="glyphicon" {{bind-attr class="priceSalesUpDown"}}></span></th>
+					<th {{action 'sortBy' 'eps'}} class="text-center">EPS <span class="glyphicon" {{bind-attr class="epsUpDown"}}></span></th>
+					<th {{action 'sortBy' 'totalCashPerShare'}} class="text-center">Cash holdings per Share <span class="glyphicon" {{bind-attr class="totalCashPerShareUpDown"}}></span></th>
+					<th {{action 'sortBy' 'bookValuePerShare'}} class="text-center">BVPS <span class="glyphicon" {{bind-attr class="bookValuePerShareUpDown"}}></span></th>
+					<th {{action 'sortBy' 'dividenYield'}} class="text-center">Dividen Yield <span class="glyphicon" {{bind-attr class="dividendYieldUpDown"}}></span></th>
+					<th {{action 'sortBy' 'profitMargin'}} class="text-center">Net Profit Margin <span class="glyphicon" {{bind-attr class="profitMarginUpDown"}}></span></th>
+					<th {{action 'sortBy' 'totalDebt'}} class="text-center">Debt <span class="glyphicon" {{bind-attr class="totalDebtUpDown"}}></span></th>
+					<th {{action 'sortBy' 'notes'}} class="text-center">Notes <span class="glyphicon" {{bind-attr class="notesUpDown"}}></span></th>
+					<th {{action 'sortBy' 'yearsDebt'}} class="text-center">Years to pay off Debt <span class="glyphicon" {{bind-attr class="yearsDebtUpDown"}}></span></th>
+					<th {{action 'sortBy' 'shares'}} class="text-center">Shares <span class="glyphicon" {{bind-attr class="sharesUpDown"}}></span></th>
 				</thead>
 				<tbody>
 					{{#each stock in this}}
@@ -34,7 +34,11 @@
 							<td>{{stock.dividendYield}}</td>
 							<td>{{stock.profitMargin}}</td>
 							<td>{{stock.totalDebt}}</td>
-							<td>{{input value=stock.notes}}</td>
+							<td>
+									<div class="col-xs-6 col-xs-offset-3">
+										{{input value=stock.notes class="form-control"}}
+									</div>
+							</td>
 							<td>{{stock.yearsDebt}}</td>
 							<td>{{stock.shares}}</td>
 							<th>

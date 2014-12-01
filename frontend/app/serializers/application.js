@@ -16,5 +16,9 @@ export default DS.RESTSerializer.extend({
       // store.metaForType(type, { total: payload.etag });  // sets the metadata for "post"
       delete payload.etag;  // keeps ember data from trying to parse "total" as a record
     }
+
+    if (!payload.stocks) {
+      payload.stocks=[];
+    }
   }
 });

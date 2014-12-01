@@ -1,7 +1,6 @@
 import json
-import requests
-import urllib2
 import logging
+import requests
 from bs4 import BeautifulSoup
 
 from core.models import Stock
@@ -13,8 +12,10 @@ class QueryHelper(BaseHelper):
     @classmethod
     def update_stock(cls, stock):
         params = {}
-        params1, msg_yahoo = cls.get_yahoo_stats(stock, params)
-        params2, msg_google = cls.get_google_stats(stock, params)
+        stock_code = stock.code[4:]
+        logging.info('CODE: '+stock_code)
+        params1, msg_yahoo = cls.get_yahoo_stats(stock_code, params)
+        params2, msg_google = cls.get_google_stats(stock_code, params)
 
         if params1 or params2:
             if params1:
@@ -43,18 +44,18 @@ class QueryHelper(BaseHelper):
     def create_stock(cls, stock):
         params = {}
         params1, msg_yahoo = cls.get_yahoo_stats(stock, params)
-        logging.error('msg_yahoo')
-        logging.error(msg_yahoo)
+        # logging.error('msg_yahoo')
+        # logging.error(msg_yahoo)
         params2, msg_google = cls.get_google_stats(stock, params)
-        logging.error('msg_google')
-        logging.error(msg_yahoo)
+        # logging.error('msg_google')
+        # logging.error(msg_google)
         if params1 and params2:
             new_stock = Stock(
                 price_sale=params1['PriceSales'],
-                TotalCashPerShare=params1['TotalCashPerShare'],
-                BookValuePerShare=params1['BookValuePerShare'],
-                ProfitMargin=params1['ProfitMargin'],
-                TotalDebt=params1['TotalDebt'],
+                total_cash_per_share=params1['TotalCashPerShare'],
+                book_value_per_share=params1['BookValuePerShare'],
+                profit_margin=params1['ProfitMargin'],
+                total_debt=params1['TotalDebt'],
                 code=params1['Symbol'],
                 name=params2['Name'],
                 price=params2['Price'],
@@ -70,18 +71,13 @@ class QueryHelper(BaseHelper):
 
     @classmethod
     def get_yahoo_ks(cls, stock):
-        url = "https://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FRO\
-        M%20yahoo.finance.keystats%20WHERE%20symbol%3D'{}.AX'&format=json&di\
-        agnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&c\
-        allback=".format(stock)
-        logging.error('URL: '+url)
+        url = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20yahoo.finance.keystats%20WHERE%20symbol%3D'{}.AX'&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=".format(stock)
         r = requests.get(url)
-        # r = urllib2.urlopen(url)
-        ks = json.loads(r.read)['query']['results']['stats']
-        if 'MarketCap' in ks:
-            return ks
-        else:
-            return None
+        if not 'error' in json.loads(r.text):
+            ks = json.loads(r.text)['query']['results']['stats']
+            if 'MarketCap' in ks:
+                return ks
+        return None
 
     @classmethod
     def get_yahoo_stats(cls, stock, params):
@@ -99,12 +95,12 @@ class QueryHelper(BaseHelper):
 
     @classmethod
     def get_google_html(cls, stock):
-        url = 'https://www.google.com/finance?q=ASX:{}'.format(stock)
+        url = 'http://www.google.com/finance?q=ASX:{}'.format(stock)
         r = requests.get(url)
         if r.status_code == 200:
             body = BeautifulSoup(r.text)
             if body.find(id='companyheader'):
-                return body, 'Status code: '+r.status_code
+                return body, 'Status code: '+str(r.status_code)
             else:
                 return None, "We couldn't find that stock"
         else:

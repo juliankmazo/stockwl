@@ -19,6 +19,11 @@ class StockResponse(messages.Message):
     shares = messages.StringField(15)
 
 
+class StockEditNoteRequest(messages.Message):
+    id = messages.IntegerField(1)
+    notes = messages.StringField(2)
+
+
 class StockListResponse(messages.Message):
     stocks = messages.MessageField(StockResponse, 1, repeated=True)
     count = messages.IntegerField(2)

@@ -4,7 +4,7 @@ from core.models import Stock
 
 from api import stock_api
 from api.messages import ID_resource
-from api.messages import StockResponse
+from api.messages import StockEditNoteRequest
 from api.messages import StockListResponse
 from api.messages import StockRequest
 from api.helpers import StockApiHelper
@@ -17,11 +17,11 @@ from core.helpers import QueryHelper
 class StockEndpoint(BaseApiController):
 
     @endpoints.method(message_types.VoidMessage, StockListResponse,
-                      path='', http_method='GET',
+                      path='/stocks', http_method='GET',
                       name='find_all')
     def get_stocks(self, request):
         stocks = Stock.query().fetch()
-        return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks], count=len(stocks))
+        return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks])
 
     @endpoints.method(ID_resource, StockListResponse,
                       path='{id}', http_method='DELETE',
@@ -29,29 +29,34 @@ class StockEndpoint(BaseApiController):
     def update_stock(self, request):
         stock = Stock.get_by_id(request.id)
         if not stock:
-            raise endpoints.NotFoundException("That Stock ID doesn't exist")
+            raise endpoints.BadRequestException("That Stock ID doesn't exist")
         else:
             stock.key.delete()
         stocks = Stock.query().fetch()
-        return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks], count=len(stocks))
+        return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks])
 
-    @endpoints.method(StockRequest, StockResponse,
-                      path='', http_method='POST',
+    @endpoints.method(StockRequest, StockListResponse,
+                      path='/stocks', http_method='POST',
                       name='create')
     def create_stock(self, request):
+        if Stock.get_by_code(request.code):
+            raise endpoints.BadRequestException('This Stock already exists')
         status = QueryHelper().create_stock(request.code)
-        import logging
-        logging.error('status')
-        logging.error(status)
         if status[0] is False:
             raise endpoints.NotFoundException('errors: ' + status[1] + ', ' + status[2])
         else:
             stocks = Stock.query().fetch()
-            return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks], count=len(stocks))
+            return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks])
 
-    @endpoints.method(ID_resource, StockResponse,
+    @endpoints.method(StockEditNoteRequest, StockListResponse,
                       path='{id}', http_method='PUT',
                       name='update')
     def delete_stock(self, request):
-        code = 'code:'+str(request.id)
-        return StockResponse(code=code, message='OK')
+        stock = Stock.get_by_id(request.id)
+        if not stock:
+            raise endpoints.BadRequestException("That Stock ID doesn't exist")
+        else:
+            stock.notes = request.notes
+            stock.put()
+        stocks = Stock.query().fetch()
+        return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks])

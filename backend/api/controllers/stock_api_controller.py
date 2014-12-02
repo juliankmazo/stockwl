@@ -4,7 +4,7 @@ from core.models import Stock
 
 from api import stock_api
 from api.messages import ID_resource
-from api.messages import StockEditNoteRequest
+#from api.messages import StockEditNoteRequest
 from api.messages import StockListResponse
 from api.messages import StockRequest
 from api.helpers import StockApiHelper
@@ -48,7 +48,7 @@ class StockEndpoint(BaseApiController):
             stocks = Stock.query().fetch()
             return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks])
 
-    @endpoints.method(StockEditNoteRequest, StockListResponse,
+    @endpoints.method(ID_resource, StockListResponse,
                       path='{id}', http_method='PUT',
                       name='update')
     def delete_stock(self, request):

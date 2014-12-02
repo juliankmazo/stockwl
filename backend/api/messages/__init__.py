@@ -9,5 +9,6 @@ from stock_api_messages import StockEditNoteRequest
 
 ID_resource = endpoints.ResourceContainer(
     message_types.VoidMessage,
-    id=messages.IntegerField(1, variant=messages.Variant.INT64, required=True)
+    id=messages.IntegerField(1, variant=messages.Variant.INT64, required=True),
+    notes=messages.StringField(2)
 )

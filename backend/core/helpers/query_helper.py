@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 
 from core.models import Stock
 from core.helpers import BaseHelper
+from core.helpers.stock_helper import StockHelper
 
 
 class QueryHelper(BaseHelper):
@@ -20,6 +21,7 @@ class QueryHelper(BaseHelper):
         if params1 or params2:
             if params1:
                 # The yahoo stats
+                params1 = StockHelper().convert_to_float(params1)
                 stock.price_sale = params1['PriceSales']
                 stock.total_cash_per_share = params1['TotalCashPerShare']
                 stock.book_value_per_share = params1['BookValuePerShare']
@@ -28,13 +30,16 @@ class QueryHelper(BaseHelper):
                 stock.code = params1['Symbol']
             if params2:
                 # The google Stats
+                params2 = StockHelper().convert_to_float(params2)
                 stock.name = params2['Name']
                 stock.price = params2['Price']
                 stock.eps = params2['EPS']
                 stock.pe = params2['PE']
                 stock.dividend_yield = params2['DivYield']
                 stock.shares = params2['Shares']
+                stock.shares_num = params2['SharesNum']
             # Put it in the DataBase
+            stock.years_debt = StockHelper().get_years_debt(params1, params2) if params1 and params2 else None
             stock.put()
             return [True, params['Symbol']+' has been updated']
         else:
@@ -49,7 +54,17 @@ class QueryHelper(BaseHelper):
         params2, msg_google = cls.get_google_stats(stock, params)
         # logging.error('msg_google')
         # logging.error(msg_google)
+        logging.error('PAR1 ANTES')
+        logging.error(params1)
+        logging.error('PAR2 ANTES')
+        logging.error(params2)
         if params1 and params2:
+            params1 = StockHelper().convert_to_float(params1)
+            params2 = StockHelper().convert_to_float(params2)
+            logging.error('PAR1')
+            logging.error(params1)
+            logging.error('PAR2')
+            logging.error(params2)
             new_stock = Stock(
                 price_sale=params1['PriceSales'],
                 total_cash_per_share=params1['TotalCashPerShare'],
@@ -62,7 +77,9 @@ class QueryHelper(BaseHelper):
                 eps=params2['EPS'],
                 pe=params2['PE'],
                 dividend_yield=params2['DivYield'],
-                shares=params2['Shares']
+                shares=params2['Shares'],
+                shares_num=params2['SharesNum'],
+                years_debt=StockHelper().get_years_debt(params1, params2)
             )
             new_stock.put()
             return [True, params['Symbol']+' has been created']
@@ -86,7 +103,7 @@ class QueryHelper(BaseHelper):
             params['PriceSales'] = ks['PriceSales']['content']
             params['TotalCashPerShare'] = ks['TotalCashPerShare']['content']
             params['BookValuePerShare'] = ks['BookValuePerShare']['content']
-            params['ProfitMargin'] = ks['ProfitMargin']['content']
+            params['ProfitMargin'] = ks['ProfitMargin']['content'][:-1]
             params['TotalDebt'] = ks['TotalDebt']['content'] if 'content' in ks['TotalDebt'] else 'N/A'
             params['Symbol'] = 'ASX:'+ks['symbol'].split('.')[0]
             return params, 'Here is '+params['Symbol']
@@ -115,13 +132,13 @@ class QueryHelper(BaseHelper):
             params['Price'] = body.find(id="price-panel").div.span.span.string
 
             element = body.find(attrs={"data-snapfield": 'eps'})
-            params['EPS'] = element.parent.find(class_="val").string if element else ""
+            params['EPS'] = element.parent.find(class_="val").string[:-1] if element else ""
             element = body.find(attrs={"data-snapfield": 'pe_ratio'})
-            params['PE'] = element.parent.find(class_="val").string if element else ""
+            params['PE'] = element.parent.find(class_="val").string[:-1] if element else ""
             element = body.find(attrs={"data-snapfield": 'latest_dividend-dividend_yield'})
-            params['DivYield'] = element.parent.find(class_="val").string if element else ""
+            params['DivYield'] = element.parent.find(class_="val").string[:-1] if element else ""
             element = body.find(attrs={"data-snapfield": 'shares'})
-            params['Shares'] = element.parent.find(class_="val").string if element else ""
+            params['Shares'] = element.parent.find(class_="val").string[:-1] if element else ""
             return params, 'Here is '+params['Code']
         else:
             return None, msg

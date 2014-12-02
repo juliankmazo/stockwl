@@ -23,17 +23,17 @@
 				<tbody>
 					{{#each stock in this}}
 						<tr>
-							<td>{{stock.code}}</td>
+							<td>${{stock.code}}</td>
 							<td>{{stock.companyName}}</td>
 							<td>{{stock.currentPrice}}</td>
 							<td>{{stock.pe}}</td>
 							<td>{{stock.priceSales}}</td>
-							<td>{{stock.eps}}</td>
-							<td>{{stock.totalCashPerShare}}</td>
-							<td>{{stock.bookValuePerShare}}</td>
+							<td>${{stock.eps}}</td>
+							<td>${{stock.totalCashPerShare}}</td>
+							<td>${{stock.bookValuePerShare}}</td>
 							<td>{{stock.dividendYield}}</td>
-							<td>{{stock.profitMargin}}</td>
-							<td>{{stock.totalDebt}}</td>
+							<td>{{stock.profitMargin}}%</td>
+							<td>${{stock.totalDebt}}</td>
 							<td>
 									<div class="col-xs-6 col-xs-offset-3">
 										{{input value=stock.notes class="form-control"}}

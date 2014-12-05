@@ -1,90 +1,194 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-sm-12">
-			<h1>Stocks</h1>
-			{{liquid-outlet}}
-			<div class="table-responsive">
-				<table class="table table-hover table-condensed text-center">
-					<thead>
-						<th {{action 'sortBy' 'code'}} class="text-center" {{bind-attr class="codeSH"}}>
-							Stock Code <span class="glyphicon" {{bind-attr class="codeUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'companyName'}} class="text-center">
-							Company Name <span class="glyphicon" {{bind-attr class="companyNameUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'currentPrice'}} class="text-center">
-							Current Price <span class="glyphicon" {{bind-attr class="currentPriceUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'pe'}} class="text-center">
-							P/E <span class="glyphicon" {{bind-attr class="peUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'priceSales'}} class="text-center">
-							P/S <span class="glyphicon" {{bind-attr class="priceSalesUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'eps'}} class="text-center">
-							EPS <span class="glyphicon" {{bind-attr class="epsUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'totalCashPerShare'}} class="text-center">
-							Cash holdings per Share <span class="glyphicon" {{bind-attr class="totalCashPerShareUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'bookValuePerShare'}} class="text-center">
-							BVPS <span class="glyphicon" {{bind-attr class="bookValuePerShareUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'dividenYield'}} class="text-center">
-							Dividen Yield <span class="glyphicon" {{bind-attr class="dividendYieldUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'profitMargin'}} class="text-center">
-							Net Profit Margin <span class="glyphicon" {{bind-attr class="profitMarginUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'totalDebt'}} class="text-center">
-							Debt <span class="glyphicon" {{bind-attr class="totalDebtUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'notes'}} class="text-center">
-							Notes <span class="glyphicon" {{bind-attr class="notesUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'yearsDebt'}} class="text-center">
-							Years to pay off Debt <span class="glyphicon" {{bind-attr class="yearsDebtUpDown"}}></span>
-						</th>
-						<th {{action 'sortBy' 'shares'}} class="text-center">
-							Shares <span class="glyphicon" {{bind-attr class="sharesUpDown"}}></span>
-						</th>
-					</thead>
-					<tbody>
-						{{#each stock in model}}
-							<tr>
-								<td>{{stock.code}}</td>
-								<td>{{stock.companyName}}</td>
-								<td>{{stock.currentPrice}}</td>
-								<td>{{stock.pe}}</td>
-								<td>{{stock.priceSales}}</td>
-								<td>${{stock.eps}}</td>
-								<td>${{stock.totalCashPerShare}}</td>
-								<td>${{stock.bookValuePerShare}}</td>
-								<td>{{stock.dividendYield}}</td>
-								<td>{{stock.profitMargin}}%</td>
-								<td>{{format-number stock.totalDebt precision=2}}</td>
-								<td>
-										<div class="col-xs-6 col-xs-offset-3">
-											{{input value=stock.notes class="form-control"}}
-										</div>
-								</td>
-								<td>{{stock.yearsDebt}}</td>
-								<td>{{stock.shares}}</td>
-								<th>
-									{{#if stock.isSaving}}
-										<p>saving...</p>
-									{{else}}	
-										{{#if stock.isDirty}}
-											<a href="#" {{action 'saveNote' stock}} class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span></a>
-										{{/if}}
-									{{/if}}
-									<a href="#" {{action 'delete' stock}} class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
-								</th>
-							</tr>
-						{{/each}}
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Stocks</h1>
+      {{liquid-outlet}}
+      {{#if showHideVisibility}}
+        <a {{action 'toggleProperty' 'showHideVisibility'}} class="btn btn-default">Show/Hide <span class='glyphicon glyphicon-eye-open'></span></a>
+        <br>
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=codeVisible}}
+            Stock Code
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=companyNameVisible}}
+            Company Name
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=currentPriceVisible}}
+            Current Price
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=peVisible}}
+            P/E
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=priceSalesVisible}}
+            P/S
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=epsVisible}}
+            EPS
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=totalCashPerShareVisible}}
+            Cash holdings per Share
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=bookValuePerShareVisible}}
+            BVPS
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=dividendYieldVisible}}
+            Dividen Yield 
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=profitMarginVisible}}
+            Net Profit Margin 
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=totalDebtVisible}}
+            Debt
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=notesVisible}}
+            Notes
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=yearsDebtVisible}}
+            Years to pay off Debt 
+          </label>
+        </div>
+
+        <div class="checkbox-inline">
+          <label>
+            {{input type="checkbox" checked=sharesVisible}}
+            Shares
+          </label>
+        </div>
+      {{else}}
+        <a {{action 'toggleProperty' 'showHideVisibility'}} class="btn btn-default">Show/Hide <span class='glyphicon glyphicon-eye-open'></span></a>
+      {{/if}}
+        
+      <div class="table-responsive">
+        <table class="table table-hover table-condensed text-center">
+          <thead>
+            <th {{action 'sortBy' 'code'}} class="text-center" {{bind-attr class="codeVisible::hidden"}}>
+              Stock Code <span class="glyphicon" {{bind-attr class="codeUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'companyName'}} class="text-center" {{bind-attr class="companyNameVisible::hidden"}}>
+              Company Name <span class="glyphicon" {{bind-attr class="companyNameUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'currentPrice'}} class="text-center" {{bind-attr class="currentPriceVisible::hidden"}}>
+              Current Price <span class="glyphicon" {{bind-attr class="currentPriceUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'pe'}} class="text-center" {{bind-attr class="peVisible::hidden"}}>
+              P/E <span class="glyphicon" {{bind-attr class="peUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'priceSales'}} class="text-center" {{bind-attr class="priceSalesVisible::hidden"}}>
+              P/S <span class="glyphicon" {{bind-attr class="priceSalesUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'eps'}} class="text-center" {{bind-attr class="epsVisible::hidden"}}>
+              EPS <span class="glyphicon" {{bind-attr class="epsUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'totalCashPerShare'}} class="text-center" {{bind-attr class="totalCashPerShareVisible::hidden"}}>
+              Cash holdings per Share <span class="glyphicon" {{bind-attr class="totalCashPerShareUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'bookValuePerShare'}} class="text-center" {{bind-attr class="bookValuePerShareVisible::hidden"}}>
+              BVPS <span class="glyphicon" {{bind-attr class="bookValuePerShareUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'dividenYield'}} class="text-center" {{bind-attr class="dividendYieldVisible::hidden"}}>
+              Dividen Yield <span class="glyphicon" {{bind-attr class="dividendYieldUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'profitMargin'}} class="text-center" {{bind-attr class="profitMarginVisible::hidden"}}>
+              Net Profit Margin <span class="glyphicon" {{bind-attr class="profitMarginUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'totalDebt'}} class="text-center" {{bind-attr class="totalDebtVisible::hidden"}}>
+              Debt <span class="glyphicon" {{bind-attr class="totalDebtUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'notes'}} class="text-center" {{bind-attr class="notesVisible::hidden"}}>
+              Notes <span class="glyphicon" {{bind-attr class="notesUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'yearsDebt'}} class="text-center" {{bind-attr class="yearsDebtVisible::hidden"}}>
+              Years to pay off Debt <span class="glyphicon" {{bind-attr class="yearsDebtUpDown"}}></span>
+            </th>
+            <th {{action 'sortBy' 'shares'}} class="text-center" {{bind-attr class="sharesVisible::hidden"}}>
+              Shares <span class="glyphicon" {{bind-attr class="sharesUpDown"}}></span>
+            </th>
+          </thead>
+          <tbody>
+            {{#each stock in model}}
+              <tr>
+                <td {{bind-attr class="codeVisible::hidden"}}>{{stock.code}}</td>
+                <td {{bind-attr class="companyNameVisible::hidden"}}>{{stock.companyName}}</td>
+                <td {{bind-attr class="currentPriceVisible::hidden"}}>{{stock.currentPrice}}</td>
+                <td {{bind-attr class="peVisible::hidden"}}>{{stock.pe}}</td>
+                <td {{bind-attr class="priceSalesVisible::hidden"}}>{{stock.priceSales}}</td>
+                <td {{bind-attr class="epsVisible::hidden"}}>${{stock.eps}}</td>
+                <td {{bind-attr class="totalCashPerShareVisible::hidden"}}>${{stock.totalCashPerShare}}</td>
+                <td {{bind-attr class="bookValuePerShareVisible::hidden"}}>${{stock.bookValuePerShare}}</td>
+                <td {{bind-attr class="dividendYieldVisible::hidden"}}>{{stock.dividendYield}}</td>
+                <td {{bind-attr class="profitMarginVisible::hidden"}}>{{stock.profitMargin}}%</td>
+                <td {{bind-attr class="totalDebtVisible::hidden"}}>{{format-number stock.totalDebt precision=2}}</td>
+                <td {{bind-attr class="notesVisible::hidden"}}>
+                    <div class="col-xs-6 col-xs-offset-3">
+                      {{input value=stock.notes class="form-control"}}
+                    </div>
+                </td>
+                <td {{bind-attr class="yearsDebtVisible::hidden"}}>{{stock.yearsDebt}}</td>
+                <td {{bind-attr class="sharesVisible::hidden"}}>{{stock.shares}}</td>
+                <th>
+                  {{#if stock.isSaving}}
+                    <p>saving...</p>
+                  {{else}}  
+                    {{#if stock.isDirty}}
+                      <a href="#" {{action 'saveNote' stock}} class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span></a>
+                    {{/if}}
+                  {{/if}}
+                  <a href="#" {{action 'delete' stock}} class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
+                </th>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>      
+    </div>
+  </div>
 </div>

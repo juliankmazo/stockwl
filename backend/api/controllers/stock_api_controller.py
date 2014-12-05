@@ -39,9 +39,13 @@ class StockEndpoint(BaseApiController):
                       path='/stocks', http_method='POST',
                       name='create')
     def create_stock(self, request):
-        if Stock.get_by_code(request.code):
+        if not request.code:
+            raise endpoints.BadRequestException('The variable code is needed')
+        else:
+            code = request.code.upper()
+        if Stock.get_by_code(code):
             raise endpoints.BadRequestException('This Stock already exists')
-        status = QueryHelper().create_stock(request.code)
+        status = QueryHelper().create_stock(code)
         if status[0] is False:
             raise endpoints.NotFoundException('errors: ' + status[1] + ', ' + status[2])
         else:

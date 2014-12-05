@@ -36,10 +36,10 @@ export default Ember.ArrayController.extend({
   showHideVisible: true,
 
   actions: {
-    
     sortBy: function(property) {
       this.set('sortProperties', [property]);
       this.set('sortAscending', !this.get('sortAscending'));
+
       var stocks = ['code',
               'companyName',
               'currentPrice',
@@ -54,9 +54,11 @@ export default Ember.ArrayController.extend({
               'notes',
               'yearsDebt',
               'shares'];
+
       for (var i = stocks.length - 1; i >= 0; i--) {
         this.set(stocks[i]+'UpDown', '');
       }
+
       if (this.get('sortAscending')) {
         this.set(property+'UpDown', 'glyphicon-chevron-up');
       }else {

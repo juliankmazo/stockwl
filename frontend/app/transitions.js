@@ -9,8 +9,8 @@ export default function(){
 	this.transition(
 		this.fromRoute('index'),
 		this.toRoute('stocks'),
-		this.use('toDown', {duration: 500}),
-		this.reverse('toUp', {duration: 500})
+		this.use('toDown', {duration: 50}),
+		this.reverse('toUp', {duration: 50})
 	);
 
 	this.transition(

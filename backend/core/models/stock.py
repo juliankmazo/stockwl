@@ -12,7 +12,7 @@ class Stock(BaseModel):
     eps = ndb.FloatProperty()
     total_cash_per_share = ndb.FloatProperty()
     book_value_per_share = ndb.FloatProperty()
-    dividend_yield = ndb.StringProperty()
+    dividend_yield = ndb.FloatProperty()
     profit_margin = ndb.FloatProperty()
     total_debt = ndb.FloatProperty()
     notes = ndb.StringProperty()

@@ -11,7 +11,7 @@ class StockResponse(messages.Message):
     eps = messages.FloatField(7)
     totalCashPerShare = messages.FloatField(8)
     bookValuePerShare = messages.FloatField(9)
-    dividendYield = messages.StringField(10)
+    dividendYield = messages.FloatField(10)
     profitMargin = messages.FloatField(11)
     totalDebt = messages.FloatField(12)
     notes = messages.StringField(13)

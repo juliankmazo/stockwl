@@ -14,7 +14,6 @@ class QueryHelper(BaseHelper):
     def update_stock(cls, stock):
         params = {}
         stock_code = stock.code[4:]
-        logging.info('CODE: '+stock_code)
         params1, msg_yahoo = cls.get_yahoo_stats(stock_code, params)
         params2, msg_google = cls.get_google_stats(stock_code, params)
 
@@ -49,11 +48,7 @@ class QueryHelper(BaseHelper):
     def create_stock(cls, stock):
         params = {}
         params1, msg_yahoo = cls.get_yahoo_stats(stock, params)
-        # logging.error('msg_yahoo')
-        # logging.error(msg_yahoo)
         params2, msg_google = cls.get_google_stats(stock, params)
-        # logging.error('msg_google')
-        # logging.error(msg_google)
         logging.error('PAR1 ANTES')
         logging.error(params1)
         logging.error('PAR2 ANTES')

@@ -1,103 +1,109 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-12">
-      <h1>Stocks</h1>
-      {{liquid-outlet}}
+      <div class="row">
+        <div class="col-xs-1">
+          <h1>Stocks</h1>
+        </div>
+        <div class="col-xs-11">
+          {{liquid-outlet}}
+        </div>
+      </div>
       {{#if showHideVisibility}}
         <a {{action 'toggleProperty' 'showHideVisibility'}} class="btn btn-default">Show/Hide <span class='glyphicon glyphicon-eye-open'></span></a>
         <br>
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=codeVisible}}
             Stock Code
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=companyNameVisible}}
             Company Name
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=currentPriceVisible}}
             Current Price
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=peVisible}}
             P/E
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=priceSalesVisible}}
             P/S
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=epsVisible}}
             EPS
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=totalCashPerShareVisible}}
             Cash holdings per Share
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=bookValuePerShareVisible}}
             BVPS
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=dividendYieldVisible}}
-            Dividen Yield 
+            Dividend Yield 
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=profitMarginVisible}}
             Net Profit Margin 
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=totalDebtVisible}}
             Debt
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=notesVisible}}
             Notes
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=yearsDebtVisible}}
             Years to pay off Debt 
           </label>
         </div>
 
-        <div class="checkbox-inline">
+        <div class="checkbox">
           <label>
             {{input type="checkbox" checked=sharesVisible}}
             Shares
@@ -106,7 +112,6 @@
       {{else}}
         <a {{action 'toggleProperty' 'showHideVisibility'}} class="btn btn-default">Show/Hide <span class='glyphicon glyphicon-eye-open'></span></a>
       {{/if}}
-        
       <div class="table-responsive">
         <table class="table table-hover table-condensed text-center">
           <thead>
@@ -135,7 +140,7 @@
               BVPS <span class="glyphicon" {{bind-attr class="bookValuePerShareUpDown"}}></span>
             </th>
             <th {{action 'sortBy' 'dividenYield'}} class="text-center" {{bind-attr class="dividendYieldVisible::hidden"}}>
-              Dividen Yield <span class="glyphicon" {{bind-attr class="dividendYieldUpDown"}}></span>
+              Dividend Yield <span class="glyphicon" {{bind-attr class="dividendYieldUpDown"}}></span>
             </th>
             <th {{action 'sortBy' 'profitMargin'}} class="text-center" {{bind-attr class="profitMarginVisible::hidden"}}>
               Net Profit Margin <span class="glyphicon" {{bind-attr class="profitMarginUpDown"}}></span>
@@ -154,7 +159,7 @@
             </th>
           </thead>
           <tbody>
-            {{#each stock in model}}
+            {{#each stock in this}}
               <tr>
                 <td {{bind-attr class="codeVisible::hidden"}}>{{stock.code}}</td>
                 <td {{bind-attr class="companyNameVisible::hidden"}}>{{stock.companyName}}</td>

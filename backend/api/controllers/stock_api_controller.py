@@ -4,7 +4,6 @@ from core.models import Stock
 
 from api import stock_api
 from api.messages import ID_resource
-#from api.messages import StockEditNoteRequest
 from api.messages import StockListResponse
 from api.messages import StockRequest
 from api.helpers import StockApiHelper
@@ -49,8 +48,10 @@ class StockEndpoint(BaseApiController):
         if status[0] is False:
             raise endpoints.NotFoundException('errors: ' + status[1] + ', ' + status[2])
         else:
-            stocks = Stock.query().fetch()
-            return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks])
+            # stocks = Stock.query().fetch()
+            # return StockListResponse(stocks=[StockApiHelper().to_message(stock) for stock in stocks if stocks])
+            stock = status[1]
+            return StockListResponse(stocks=[StockApiHelper().to_message(stock)])
 
     @endpoints.method(ID_resource, StockListResponse,
                       path='{id}', http_method='PUT',

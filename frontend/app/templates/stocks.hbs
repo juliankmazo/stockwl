@@ -10,7 +10,7 @@
         </div>
       </div>
       {{#if showHideVisibility}}
-        <a {{action 'toggleProperty' 'showHideVisibility'}} class="btn btn-default">Show/Hide <span class='glyphicon glyphicon-eye-open'></span></a>
+        <a {{action 'toggleProperty' 'showHideVisibility'}} class="btn btn-default"><span class='glyphicon glyphicon-eye-open'></span> Show/Hide columns</a>
         <br>
         <div class="checkbox">
           <label>
@@ -110,8 +110,10 @@
           </label>
         </div>
       {{else}}
-        <a {{action 'toggleProperty' 'showHideVisibility'}} class="btn btn-default">Show/Hide <span class='glyphicon glyphicon-eye-open'></span></a>
+        <a {{action 'toggleProperty' 'showHideVisibility'}} class="btn btn-default"><span class='glyphicon glyphicon-eye-open'></span> Show/Hide columns</a>
       {{/if}}
+      <br>
+      <br>
       <div class="table-responsive">
         <table class="table table-hover table-condensed text-center">
           <thead>
@@ -161,7 +163,7 @@
           <tbody>
             {{#each stock in this}}
               <tr>
-                <td {{bind-attr class="codeVisible::hidden"}}>{{stock.code}}</td>
+                <td {{bind-attr class="codeVisible:text-uppercase:hidden"}}>{{stock.code}}</td>
                 <td {{bind-attr class="companyNameVisible::hidden"}}>{{stock.companyName}}</td>
                 <td {{bind-attr class="currentPriceVisible::hidden"}}>{{stock.currentPrice}}</td>
                 <td {{bind-attr class="peVisible::hidden"}}>
@@ -197,9 +199,7 @@
                 </td>
                 <td {{bind-attr class="totalDebtVisible::hidden"}}>{{format-number stock.totalDebt precision=0}}</td>
                 <td {{bind-attr class="notesVisible::hidden"}}>
-                    <div class="col-xs-6 col-xs-offset-3">
-                      {{input value=stock.notes class="form-control"}}
-                    </div>
+                      {{input value=stock.notes class="form-control w-100"}}
                 </td>
                 <td {{bind-attr class="yearsDebtVisible::hidden"}}>
                  {{#if stock.yearsDebt}}

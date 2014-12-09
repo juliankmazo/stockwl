@@ -77,7 +77,7 @@ class QueryHelper(BaseHelper):
                 years_debt=StockHelper().get_years_debt(params1, params2)
             )
             new_stock.put()
-            return [True, params['Symbol']+' has been created']
+            return [True, new_stock, params['Symbol']+' has been created']
         else:
             return [False, msg_yahoo, msg_google]
 

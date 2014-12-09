@@ -26,7 +26,7 @@ class StockEndpoint(BaseApiController):
     @endpoints.method(ID_resource, StockListResponse,
                       path='{id}', http_method='DELETE',
                       name='delete')
-    def update_stock(self, request):
+    def delete_stock(self, request):
         stock = Stock.get_by_id(request.id)
         if not stock:
             raise endpoints.BadRequestException("That Stock ID doesn't exist")
@@ -55,7 +55,7 @@ class StockEndpoint(BaseApiController):
     @endpoints.method(ID_resource, StockListResponse,
                       path='{id}', http_method='PUT',
                       name='update')
-    def delete_stock(self, request):
+    def update_stock(self, request):
         stock = Stock.get_by_id(request.id)
         if not stock:
             raise endpoints.BadRequestException("That Stock ID doesn't exist")

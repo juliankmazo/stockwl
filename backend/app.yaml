@@ -23,6 +23,7 @@ handlers:
 
 - url: .*
   static_files: dist/index.html
+  login: required
   upload: dist/index.html
   secure: always
 

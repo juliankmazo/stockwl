@@ -20,8 +20,7 @@ class StockResponse(messages.Message):
 
 
 class StockEditNoteRequest(messages.Message):
-    id = messages.IntegerField(1)
-    notes = messages.StringField(2)
+    notes = messages.StringField(1)
 
 
 class StockListResponse(messages.Message):

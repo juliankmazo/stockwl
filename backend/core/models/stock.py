@@ -4,6 +4,10 @@ from core.models import BaseModel
 
 
 class Stock(BaseModel):
+    """
+    This class is for defining the Model of the Entity Stock. Its properties and methods.
+    """
+    # Properties of the ndb Model
     code = ndb.StringProperty(required=True)
     name = ndb.StringProperty()
     price = ndb.FloatProperty()
@@ -22,6 +26,9 @@ class Stock(BaseModel):
 
     @classmethod
     def get_by_code(cls, code):
+        """
+        This property from Stock is useful for getting the entity by its code string
+        """
         complete_code = 'ASX:'+code
         s = cls.query(cls.code == complete_code).get()
         if s:

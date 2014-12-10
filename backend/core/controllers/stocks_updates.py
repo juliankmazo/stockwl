@@ -7,7 +7,9 @@ import logging
 
 class UpdateStockController(BaseController):
     """
-    Gets stats from yahoo and google, then updates the database
+    This function is the one that is run periocally.
+    It updates the stock information.
+    Gets stats from yahoo and google, then updates the database.
     """
 
     def get(self):

@@ -1,3 +1,7 @@
+/*
+This file allows to handle the animated transitions in the application
+For more information please visit https://github.com/ef4/liquid-fire
+*/
 export default function(){
 	this.transition(
 		this.fromRoute('stocks.index'),
